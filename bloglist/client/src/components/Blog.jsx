@@ -1,19 +1,22 @@
 import { Link } from 'react-router-dom'
-const Blog = ({ blog }) => {
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 2,
-    marginBottom: 5,
-  }
+import { Card, CardActionArea, CardContent, Stack, Typography } from '@mui/material'
 
+const Blog = ({ blog }) => {
   return (
-    <div data-testid="blog" style={blogStyle}>
-      <Link to={`/blogs/${blog.id}`}>
-        {blog.title} {blog.author}
-      </Link>
-    </div>
+    <Card data-testid="blog" variant="outlined" sx={{ mb: 1.5 }}>
+      <CardActionArea component={Link} to={`/blogs/${blog.id}`}>
+        <CardContent>
+          <Stack spacing={0.5}>
+            <Typography component="h3" variant="h6">
+              {blog.title}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {blog.author}
+            </Typography>
+          </Stack>
+        </CardContent>
+      </CardActionArea>
+    </Card>
   )
 }
 

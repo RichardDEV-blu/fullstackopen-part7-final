@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom'
+import { Alert, CircularProgress, Paper, Stack, Typography } from '@mui/material'
 import { useUser } from '../hooks/server_state/useUsers'
 
 const UserView = () => {
@@ -7,29 +8,42 @@ const UserView = () => {
   const { data: user, isLoading, isError } = useUser(id)
 
   if (isLoading) {
-    return <p>loading...</p>
+    return (
+      <Stack spacing={1} sx={{ py: 6, alignItems: 'center' }}>
+        <CircularProgress size={28} />
+        <Typography variant="body2" color="text.secondary">
+          loading...
+        </Typography>
+      </Stack>
+    )
   }
 
   if (isError) {
-    return <p>failed to load user</p>
+    return <Alert severity="error" sx={{ mt: 3 }}>failed to load user</Alert>
   }
 
   if (!user) {
-    return <p>user not found</p>
+    return <Alert severity="info" sx={{ mt: 3 }}>user not found</Alert>
   }
 
   return (
-    <div>
-      <h2>{user.name}</h2>
+    <Paper variant="outlined" sx={{ mt: 3, p: { xs: 2, sm: 3 } }}>
+      <Typography component="h2" variant="h4">
+        {user.name}
+      </Typography>
 
-      <h3>added blogs</h3>
+      <Typography component="h3" variant="h6" sx={{ mt: 3, mb: 1 }}>
+        Added blogs
+      </Typography>
 
-      <ul>
+      <Stack component="ul" spacing={1} sx={{ m: 0, pl: 2.5 }}>
         {user.blogs.map((blog) => (
-          <li key={blog.id}>{blog.title}</li>
+          <Typography component="li" key={blog.id} variant="body1">
+            {blog.title}
+          </Typography>
         ))}
-      </ul>
-    </div>
+      </Stack>
+    </Paper>
   )
 }
 

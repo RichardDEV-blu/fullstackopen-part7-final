@@ -9,7 +9,11 @@ const Notification = () => {
   }
 
   return (
-    <Alert severity={type === 'error' ? 'error' : 'success'} sx={{ mb: 2 }}>
+    <Alert
+      severity={type === 'error' ? 'error' : 'success'}
+      variant="filled"
+      sx={{ mb: 2, borderRadius: 2 }}
+    >
       {message}
     </Alert>
   )

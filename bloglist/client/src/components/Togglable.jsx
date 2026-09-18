@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Box, Button, Paper } from '@mui/material'
 
 const Togglable = (props) => {
   const [visible, setVisible] = useState(false)
@@ -7,16 +8,22 @@ const Togglable = (props) => {
   const showWhenVisible = { display: visible ? '' : 'none' }
 
   return (
-    <div>
-      <div style={hideWhenVisible}>
-        <button onClick={() => setVisible(true)}>{props.buttonLabel}</button>
-      </div>
+    <Box>
+      <Box sx={hideWhenVisible}>
+        <Button variant="contained" onClick={() => setVisible(true)}>
+          {props.buttonLabel}
+        </Button>
+      </Box>
 
-      <div style={showWhenVisible}>
-        {props.children}
-        <button onClick={() => setVisible(false)}>cancel</button>
-      </div>
-    </div>
+      <Box sx={showWhenVisible}>
+        <Paper variant="outlined" sx={{ p: 2 }}>
+          {props.children}
+          <Button variant="text" onClick={() => setVisible(false)} sx={{ mt: 2 }}>
+            cancel
+          </Button>
+        </Paper>
+      </Box>
+    </Box>
   )
 }
 

@@ -1,4 +1,4 @@
-import { Button, Stack, TextField } from '@mui/material'
+import { Button, Paper, Stack, TextField, Typography } from '@mui/material'
 import { useField } from '../hooks/client_state'
 
 const BlogForm = ({ createBlog }) => {
@@ -21,22 +21,32 @@ const BlogForm = ({ createBlog }) => {
   }
 
   return (
-    <Stack
-      component="form"
-      onSubmit={addBlog}
-      spacing={2}
-      sx={{ maxWidth: 500, mt: 2 }}
+    <Paper
+      variant="outlined"
+      sx={{
+        width: '100%',
+        maxWidth: 500,
+        mx: 'auto',
+        mt: 3,
+        p: { xs: 2, sm: 3 },
+      }}
     >
-      <TextField {...title.input} label="title" name="title" fullWidth />
+      <Stack component="form" onSubmit={addBlog} spacing={2}>
+        <Typography component="h2" variant="h5">
+          Create a new blog
+        </Typography>
 
-      <TextField {...author.input} label="author" name="author" fullWidth />
+        <TextField {...title.input} label="title" name="title" fullWidth />
 
-      <TextField {...url.input} label="url" name="url" fullWidth />
+        <TextField {...author.input} label="author" name="author" fullWidth />
 
-      <Button type="submit" variant="contained">
-        create
-      </Button>
-    </Stack>
+        <TextField {...url.input} label="url" name="url" fullWidth />
+
+        <Button type="submit" variant="contained">
+          create
+        </Button>
+      </Stack>
+    </Paper>
   )
 }
 

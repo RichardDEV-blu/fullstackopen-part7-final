@@ -1,4 +1,4 @@
-import { Button, Stack, TextField } from '@mui/material'
+import { Button, Paper, Stack, TextField, Typography } from '@mui/material'
 import { useField } from '../hooks/client_state'
 
 const LoginForm = ({ handleLogin }) => {
@@ -18,35 +18,36 @@ const LoginForm = ({ handleLogin }) => {
   }
 
   return (
-    <Stack
-      component="form"
-      onSubmit={login}
-      spacing={2}
-      sx={{ maxWidth: 400, mt: 2 }}
-    >
-      <TextField
-        {...username.input}
-        autoComplete="username"
-        label="Username"
-        name="username"
-        required
-        fullWidth
-      />
+    <Paper variant="outlined" sx={{ maxWidth: 400, mt: 3, p: { xs: 2, sm: 3 } }}>
+      <Stack component="form" onSubmit={login} spacing={2}>
+        <Typography component="h2" variant="h5">
+          Log in
+        </Typography>
 
-      <TextField
-        {...password.input}
-        autoComplete="current-password"
-        label="Password"
-        name="password"
-        type="password"
-        required
-        fullWidth
-      />
+        <TextField
+          {...username.input}
+          autoComplete="username"
+          label="Username"
+          name="username"
+          required
+          fullWidth
+        />
 
-      <Button type="submit" variant="contained">
-        Login
-      </Button>
-    </Stack>
+        <TextField
+          {...password.input}
+          autoComplete="current-password"
+          label="Password"
+          name="password"
+          type="password"
+          required
+          fullWidth
+        />
+
+        <Button type="submit" variant="contained">
+          Login
+        </Button>
+      </Stack>
+    </Paper>
   )
 }
 

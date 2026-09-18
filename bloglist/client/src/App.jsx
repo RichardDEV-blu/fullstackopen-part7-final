@@ -6,7 +6,16 @@ import loginService from './services/login'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import BlogView from './components/BlogView'
-import { Button, Container, AppBar, Toolbar } from '@mui/material'
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  Paper,
+  Stack,
+  Toolbar,
+  Typography,
+} from '@mui/material'
 import ErrorBoundary from './components/ErrorBoundary'
 import { useSetNotification } from './hooks/client_state/useNotification'
 import {
@@ -108,17 +117,31 @@ const App = () => {
   }
 
   const blogsView = () => (
-    <>
+    <Stack spacing={2} sx={{ mt: 3 }}>
       {user ? (
-        <>
-          <p>{user.name} logged in</p>
+        <Paper
+          variant="outlined"
+          sx={{
+            p: 1.5,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 2,
+          }}
+        >
+          <Typography variant="body2" color="text.secondary">
+            {user.name} logged in
+          </Typography>
 
-          <button onClick={handleLogout}>logout</button>
-        </>
+          <Button onClick={handleLogout} variant="outlined" size="small">
+            logout
+          </Button>
+        </Paper>
       ) : (
-        <p>
+        <Typography variant="body2" color="text.secondary">
+          Please log in to create and manage blogs.{' '}
           <Link to="/login">login</Link>
-        </p>
+        </Typography>
       )}
 
       {[...blogs]
@@ -126,16 +149,18 @@ const App = () => {
         .map((blog) => (
           <Blog key={blog.id} blog={blog} />
         ))}
-    </>
+    </Stack>
   )
 
   return (
-    <Container maxWidth="md">
-      <div>
+    <Container maxWidth="md" sx={{ py: { xs: 2, sm: 4 } }}>
+      <Stack spacing={2}>
         <Notification />
 
-        <h2>blogs</h2>
-        <AppBar position="static">
+        <Typography component="h1" variant="h3" fontWeight={700}>
+          blogs
+        </Typography>
+        <AppBar position="static" sx={{ borderRadius: 2, boxShadow: 2 }}>
           <Toolbar sx={{ gap: 1 }}>
             <Button component={Link} to="/" color="inherit">
               blogs
@@ -182,7 +207,9 @@ const App = () => {
               path="/new"
               element={
                 user ? (
-                  <BlogForm createBlog={createBlog} />
+                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <BlogForm createBlog={createBlog} />
+                  </Box>
                 ) : (
                   <LoginForm handleLogin={handleLogin} />
                 )
@@ -193,14 +220,16 @@ const App = () => {
             <Route
               path="*"
               element={
-                <div>
-                  <h2>404 - Page not found</h2>
-                </div>
+                <Paper variant="outlined" sx={{ mt: 3, p: 3 }}>
+                  <Typography component="h2" variant="h5">
+                    404 - Page not found
+                  </Typography>
+                </Paper>
               }
             />
           </Routes>
         </ErrorBoundary>
-      </div>
+      </Stack>
     </Container>
   )
 }

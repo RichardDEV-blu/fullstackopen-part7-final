@@ -25,11 +25,13 @@ const BlogView = ({ blog, user, likeBlog, deleteBlog }) => {
       id: blog.id,
       comment: text,
     })
-
     comment.reset()
   }
   return (
-    <Paper variant="outlined" sx={{ mt: 2, p: 2 }}>
+    <Paper
+      variant="outlined"
+      sx={{ mt: 3, p: { xs: 2, sm: 3 }, borderRadius: 2 }}
+    >
       <Typography component="h2" variant="h5" sx={{ mb: 2 }}>
         {blog.title} {blog.author}
       </Typography>
@@ -44,8 +46,10 @@ const BlogView = ({ blog, user, likeBlog, deleteBlog }) => {
           {blog.url}
         </Link>
 
-        <Stack direction="row" spacing={1} alignitems="center">
-          <Typography>{blog.likes} likes</Typography>
+        <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+          <Typography variant="subtitle1" fontWeight={600}>
+            {blog.likes} likes
+          </Typography>
 
           {user && (
             <Button
@@ -64,16 +68,17 @@ const BlogView = ({ blog, user, likeBlog, deleteBlog }) => {
 
         {user && blog.user.id === user.id && (
           <Button
-            variant="text"
+            variant="outlined"
             color="error"
             size="small"
             onClick={() => deleteBlog(blog)}
+            sx={{ alignSelf: 'flex-start' }}
           >
             remove
           </Button>
         )}
 
-        <div>
+        <Stack spacing={1} sx={{ pt: 1 }}>
           <Typography component="h3" variant="h6">
             Comments
           </Typography>
@@ -85,19 +90,26 @@ const BlogView = ({ blog, user, likeBlog, deleteBlog }) => {
             onSubmit={handleCommentSubmit}
             sx={{ mt: 1 }}
           >
-            <TextField {...comment.input} label="comment" size="small" />
+            <TextField
+              {...comment.input}
+              label="comment"
+              size="small"
+              fullWidth
+            />
 
             <Button type="submit" variant="contained">
               add comment
             </Button>
           </Stack>
 
-          <ul>
+          <Stack component="ul" spacing={0.75} sx={{ m: 0, pl: 2.5 }}>
             {blog.comments.map((comment, index) => (
-              <li key={index}>{comment}</li>
+              <Typography component="li" key={index} variant="body2">
+                {comment}
+              </Typography>
             ))}
-          </ul>
-        </div>
+          </Stack>
+        </Stack>
       </Stack>
     </Paper>
   )

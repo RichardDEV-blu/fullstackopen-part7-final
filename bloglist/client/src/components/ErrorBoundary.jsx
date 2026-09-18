@@ -1,4 +1,5 @@
 import React from 'react'
+import { Alert, Box } from '@mui/material'
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -8,7 +9,7 @@ class ErrorBoundary extends React.Component {
     }
   }
 
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError() {
     return {
       hasError: true,
     }
@@ -16,7 +17,11 @@ class ErrorBoundary extends React.Component {
 
   render() {
     if (this.state.hasError) {
-      return <h2>Something went wrong. Call Richard.</h2>
+      return (
+        <Box sx={{ mt: 3 }}>
+          <Alert severity="error">Something went wrong. Call Richard.</Alert>
+        </Box>
+      )
     }
     return this.props.children
   }
