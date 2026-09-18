@@ -9,10 +9,11 @@ const error = (...params) => {
 }
 
 module.exports = {
-  info, error
+  info,
+  error,
 }
 
 module.exports = {
   info,
-  error
+  error,
 }

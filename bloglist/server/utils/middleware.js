@@ -23,15 +23,12 @@ const tokenExtractor = (request, response, next) => {
 const userExtractor = async (request, response, next) => {
   if (!request.token) {
     return response.status(401).json({
-      error: 'token missing'
+      error: 'token missing',
     })
   }
 
   try {
-    const decodedToken = jwt.verify(
-      request.token,
-      process.env.SECRET
-    )
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
     const user = await User.findById(decodedToken.id)
 
@@ -46,7 +43,6 @@ const userExtractor = async (request, response, next) => {
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
-
 
 const errorHandler = (error, request, response, next) => {
   logger.error(error.message)
@@ -68,5 +64,5 @@ module.exports = {
   unknownEndpoint,
   errorHandler,
   tokenExtractor,
-  userExtractor
+  userExtractor,
 }

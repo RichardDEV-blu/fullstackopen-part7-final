@@ -12,15 +12,24 @@ const BlogView = ({ blog, user, likeBlog, deleteBlog }) => {
       </Typography>
 
       <Stack spacing={2}>
-        <Link href={blog.url} target="_blank" rel="noreferrer" underline="hover">
+        <Link
+          href={blog.url}
+          target="_blank"
+          rel="noreferrer"
+          underline="hover"
+        >
           {blog.url}
         </Link>
- 
+
         <Stack direction="row" spacing={1} alignitems="center">
           <Typography>{blog.likes} likes</Typography>
 
           {user && (
-            <Button variant="outlined" size="small" onClick={() => likeBlog(blog)}>
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => likeBlog(blog)}
+            >
               like
             </Button>
           )}

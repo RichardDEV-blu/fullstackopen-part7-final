@@ -24,9 +24,6 @@ test('calls createBlog with correct details when a new blog is created', async (
   expect(createBlog).toHaveBeenCalledWith({
     title: 'Test title',
     author: 'Test author',
-    url: 'https://example.com'
+    url: 'https://example.com',
   })
-
-
-
 })

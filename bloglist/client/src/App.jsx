@@ -16,14 +16,10 @@ const App = () => {
   const [notification, setNotification] = useState(null)
   const navigate = useNavigate()
   const match = useMatch('/blogs/:id')
-  const blog = match
-    ? blogs.find(blog => blog.id === match.params.id)
-    : null
+  const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs)
-    )
+    blogService.getAll().then((blogs) => setBlogs(blogs))
   }, [])
 
   useEffect(() => {
@@ -41,7 +37,7 @@ const App = () => {
 
       window.localStorage.setItem(
         'loggedBlogappUser',
-        JSON.stringify(loggedUser)
+        JSON.stringify(loggedUser),
       )
 
       setUser(loggedUser)
@@ -61,14 +57,9 @@ const App = () => {
     try {
       const returnedBlog = await blogService.create(blog, user.token)
 
-      setBlogs(currentBlogs =>
-        currentBlogs.concat(returnedBlog)
-      )
+      setBlogs((currentBlogs) => currentBlogs.concat(returnedBlog))
 
-      showNotification(
-        `a new blog ${returnedBlog.title} added`,
-        'success'
-      )
+      showNotification(`a new blog ${returnedBlog.title} added`, 'success')
 
       navigate('/')
     } catch {
@@ -88,19 +79,17 @@ const App = () => {
     const updatedBlog = {
       ...blog,
       likes: blog.likes + 1,
-      user: blog.user.id
+      user: blog.user.id,
     }
 
     const returnedBlog = await blogService.update(
       blog.id,
       updatedBlog,
-      user.token
+      user.token,
     )
 
-    setBlogs(currentBlogs =>
-      currentBlogs.map(b =>
-        b.id === returnedBlog.id ? returnedBlog : b
-      )
+    setBlogs((currentBlogs) =>
+      currentBlogs.map((b) => (b.id === returnedBlog.id ? returnedBlog : b)),
     )
   }
 
@@ -111,9 +100,7 @@ const App = () => {
 
     await blogService.remove(blog.id, user.token)
 
-    setBlogs(currentBlogs =>
-      currentBlogs.filter(b => b.id !== blog.id)
-    )
+    setBlogs((currentBlogs) => currentBlogs.filter((b) => b.id !== blog.id))
 
     navigate('/')
   }
@@ -124,42 +111,24 @@ const App = () => {
         <>
           <p>{user.name} logged in</p>
 
-          <button onClick={handleLogout}>
-            logout
-          </button>
-
+          <button onClick={handleLogout}>logout</button>
         </>
-
-
-
       ) : (
         <p>
-          <Link to="/login">
-            login
-          </Link>
+          <Link to="/login">login</Link>
         </p>
-
       )}
 
       {[...blogs]
         .sort((a, b) => b.likes - a.likes)
-        .map(blog =>
-          <Blog
-            key={blog.id}
-            blog={blog}
-          />
-        )}
-
+        .map((blog) => (
+          <Blog key={blog.id} blog={blog} />
+        ))}
     </>
-
   )
 
-
-
-
   return (
-
-    <Container maxWidth='md'>
+    <Container maxWidth="md">
       <div>
         <Notification
           message={notification?.message}
@@ -189,10 +158,7 @@ const App = () => {
 
         <ErrorBoundary>
           <Routes>
-            <Route
-              path="/"
-              element={blogsView()}
-            />
+            <Route path="/" element={blogsView()} />
 
             <Route
               path="/login"
@@ -212,22 +178,26 @@ const App = () => {
             <Route
               path="/new"
               element={
-                user
-                  ? <BlogForm createBlog={createBlog} />
-                  : <LoginForm handleLogin={handleLogin} />
+                user ? (
+                  <BlogForm createBlog={createBlog} />
+                ) : (
+                  <LoginForm handleLogin={handleLogin} />
+                )
               }
             />
 
             <Route
               path="*"
-              element={<div><h2>404 - Page not found</h2></div>}
+              element={
+                <div>
+                  <h2>404 - Page not found</h2>
+                </div>
+              }
             />
           </Routes>
         </ErrorBoundary>
-
       </div>
     </Container>
-
   )
 }
 

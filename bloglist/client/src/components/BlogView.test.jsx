@@ -9,8 +9,8 @@ const blog = {
   likes: 5,
   user: {
     name: 'Richard',
-    id: '123'
-  }
+    id: '123',
+  },
 }
 
 test('shows blog information and likes to unauthenticated users, but no buttons', () => {
@@ -23,7 +23,7 @@ test('shows blog information and likes to unauthenticated users, but no buttons'
       user={null}
       likeBlog={likeBlog}
       deleteBlog={deleteBlog}
-    />
+    />,
   )
 
   expect(screen.getByText('Test Blog Test Author')).toBeVisible()
@@ -37,7 +37,7 @@ test('shows blog information and likes to unauthenticated users, but no buttons'
 test('shows only the like button to an authenticated user who is not the creator', () => {
   const user = {
     name: 'Other User',
-    id: '456'
+    id: '456',
   }
 
   const likeBlog = vi.fn()
@@ -49,7 +49,7 @@ test('shows only the like button to an authenticated user who is not the creator
       user={user}
       likeBlog={likeBlog}
       deleteBlog={deleteBlog}
-    />
+    />,
   )
 
   expect(screen.getByText('Test Blog Test Author')).toBeVisible()
@@ -63,7 +63,7 @@ test('shows only the like button to an authenticated user who is not the creator
 test('shows both like and remove buttons to the creator', () => {
   const user = {
     name: 'Richard',
-    id: '123'
+    id: '123',
   }
 
   const likeBlog = vi.fn()
@@ -75,7 +75,7 @@ test('shows both like and remove buttons to the creator', () => {
       user={user}
       likeBlog={likeBlog}
       deleteBlog={deleteBlog}
-    />
+    />,
   )
 
   expect(screen.getByText('like')).toBeVisible()
@@ -85,7 +85,7 @@ test('shows both like and remove buttons to the creator', () => {
 test('calls like handler when like button is clicked', async () => {
   const user = {
     name: 'Other User',
-    id: '456'
+    id: '456',
   }
 
   const likeBlog = vi.fn()
@@ -97,7 +97,7 @@ test('calls like handler when like button is clicked', async () => {
       user={user}
       likeBlog={likeBlog}
       deleteBlog={deleteBlog}
-    />
+    />,
   )
 
   const userEventSetup = userEvent.setup()

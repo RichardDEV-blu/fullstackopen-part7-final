@@ -11,7 +11,7 @@ const LoginForm = ({ handleLogin }) => {
 
     handleLogin({
       username,
-      password
+      password,
     })
   }
 

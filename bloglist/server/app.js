@@ -15,14 +15,14 @@ const middleware = require('./utils/middleware')
 
 mongoose.set('strictQuery', false)
 
-
-mongoose.connect(config.MONGODB_URI)
-    .then(() => {
-        logger.info('connected to MongoDB')
-    })
-    .catch(error => {
-        logger.error('error connecting to MongoDB:', error.message)
-    })
+mongoose
+  .connect(config.MONGODB_URI)
+  .then(() => {
+    logger.info('connected to MongoDB')
+  })
+  .catch((error) => {
+    logger.error('error connecting to MongoDB:', error.message)
+  })
 
 const app = express()
 
