@@ -78,4 +78,29 @@ blogsRouter.put('/:id', middleware.userExtractor, async (request, response) => {
   response.json(result)
 })
 
+blogsRouter.post('/:id/comments', async (request, response) => {
+  const { comment } = request.body
+
+  if (!comment || comment.trim() === '') {
+    return response.status(400).json({
+      error: 'comment cannot be empty',
+    })
+  }
+  const blog = await Blog.findById(request.params.id)
+  if (!blog) {
+    return response.status(404).json({
+      error: 'blog not found',
+    })
+  }
+
+  blog.comments.push(comment)
+  const updatedBlog = await blog.save()
+
+  const populatedBlog = await updatedBlog.populate('user', {
+    username: 1,
+    name: 1,
+  })
+  response.json(populatedBlog)
+})
+
 module.exports = blogsRouter

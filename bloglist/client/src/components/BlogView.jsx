@@ -21,7 +21,7 @@ const BlogView = ({ blog, user, likeBlog, deleteBlog }) => {
           {blog.url}
         </Link>
 
-        <Stack direction="row" spacing={1} alignitems="center">
+        <Stack direction="row" spacing={1} alignItems="center">
           <Typography>{blog.likes} likes</Typography>
 
           {user && (
@@ -49,6 +49,18 @@ const BlogView = ({ blog, user, likeBlog, deleteBlog }) => {
             remove
           </Button>
         )}
+
+        <div>
+          <Typography component="h3" variant="h6">
+            Comments
+          </Typography>
+
+          <ul>
+            {blog.comments.map((comment, index) => (
+              <li key={index}>{comment}</li>
+            ))}
+          </ul>
+        </div>
       </Stack>
     </Paper>
   )
