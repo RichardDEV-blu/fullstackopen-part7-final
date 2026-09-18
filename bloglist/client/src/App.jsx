@@ -18,6 +18,7 @@ import {
 import { useUser, useUserActions } from './hooks/client_state/useUserStore'
 import persistenUser from './services/persistenUser'
 import Users from './components/Users'
+import UserView from './components/UserView'
 const App = () => {
   const user = useUser()
   const { setUser } = useUserActions()
@@ -188,6 +189,7 @@ const App = () => {
               }
             />
             <Route path="/users" element={<Users />} />
+            <Route path="/users/:id" element={<UserView />} />
             <Route
               path="*"
               element={

@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
+const mongoose = require('mongoose')
 const usersRouter = require('express').Router()
 
 usersRouter.get('/', async (request, response) => {
@@ -37,6 +38,26 @@ usersRouter.post('/', async (request, response) => {
   })
   const savedUser = await user.save()
   response.status(201).json(savedUser)
+})
+
+usersRouter.get('/:id', async (request, response) => {
+  const { id } = request.params
+
+  if (!mongoose.isValidObjectId(id)) {
+    return response.status(400).json({
+      error: 'malformatted id',
+    })
+  }
+
+  const user = await User.findById(id).populate('blogs')
+
+  if (!user) {
+    return response.status(404).json({
+      error: 'user not found',
+    })
+  }
+
+  response.json(user)
 })
 
 module.exports = usersRouter

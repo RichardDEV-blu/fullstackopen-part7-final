@@ -7,3 +7,10 @@ export const useUsers = () => {
     queryFn: users.getAll,
   })
 }
+
+export const useUser = (id) => {
+  return useQuery({
+    queryKey: ['users', id],
+    queryFn: () => users.getOne(id),
+  })
+}
