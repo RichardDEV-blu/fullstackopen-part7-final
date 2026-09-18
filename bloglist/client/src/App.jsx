@@ -9,15 +9,18 @@ import Notification from './components/Notification'
 import BlogView from './components/BlogView'
 import { Button, Container, AppBar, Toolbar } from '@mui/material'
 import ErrorBoundary from './components/ErrorBoundary'
-import { useSetNotification } from './hooks/useNotification'
+import { useSetNotification } from './hooks/client_state/useNotification'
 import {
   useBlogs,
   useCreateBlog,
   useLikeBlog,
   useDeleteBlog,
 } from './hooks/useBlogs'
+import { useUser, useUserActions } from './hooks/client_state/useUserStore'
 
 const App = () => {
+  const user = useUser()
+  const { setUser, clearUser } = useUserActions()
   const { data: blogs = [] } = useBlogs()
 
   const createBlogMutation = useCreateBlog()
@@ -26,7 +29,6 @@ const App = () => {
 
   const setNotification = useSetNotification()
 
-  const [user, setUser] = useState(null)
   const navigate = useNavigate()
   const match = useMatch('/blogs/:id')
   const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null

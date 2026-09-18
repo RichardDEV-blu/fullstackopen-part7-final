@@ -1,5 +1,5 @@
 import { Alert } from '@mui/material'
-import { useNotification } from '../hooks/useNotification'
+import { useNotification } from '../hooks/client_state/useNotification'
 
 const Notification = () => {
   const { message, type } = useNotification()

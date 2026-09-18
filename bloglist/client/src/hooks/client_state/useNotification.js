@@ -1,5 +1,5 @@
 import { useShallow } from 'zustand/react/shallow'
-import useNotificationStore from '../stores/notificationStore'
+import useNotificationStore from '../../stores/notificationStore'
 
 export const useNotification = () =>
   useNotificationStore(
