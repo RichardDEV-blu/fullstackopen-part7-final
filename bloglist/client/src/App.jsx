@@ -8,6 +8,7 @@ import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import BlogView from './components/BlogView'
 import { Button, Container, AppBar, Toolbar } from '@mui/material'
+import ErrorBoundary from './components/ErrorBoundary'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -185,36 +186,39 @@ const App = () => {
             )}
           </Toolbar>
         </AppBar>
-        <Routes>
-          <Route
-            path="/"
-            element={blogsView()}
-          />
 
-          <Route
-            path="/login"
-            element={<LoginForm handleLogin={handleLogin} />}
-          />
-          <Route
-            path="/blogs/:id"
-            element={
-              <BlogView
-                blog={blog}
-                user={user}
-                likeBlog={likeBlog}
-                deleteBlog={deleteBlog}
-              />
-            }
-          />
-          <Route
-            path="/new"
-            element={
-              user
-                ? <BlogForm createBlog={createBlog} />
-                : <LoginForm handleLogin={handleLogin} />
-            }
-          />
-        </Routes>
+        <ErrorBoundary>
+          <Routes>
+            <Route
+              path="/"
+              element={blogsView()}
+            />
+
+            <Route
+              path="/login"
+              element={<LoginForm handleLogin={handleLogin} />}
+            />
+            <Route
+              path="/blogs/:id"
+              element={
+                <BlogView
+                  blog={blog}
+                  user={user}
+                  likeBlog={likeBlog}
+                  deleteBlog={deleteBlog}
+                />
+              }
+            />
+            <Route
+              path="/new"
+              element={
+                user
+                  ? <BlogForm createBlog={createBlog} />
+                  : <LoginForm handleLogin={handleLogin} />
+              }
+            />
+          </Routes>
+        </ErrorBoundary>
 
       </div>
     </Container>

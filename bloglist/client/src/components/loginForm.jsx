@@ -2,6 +2,7 @@ import { Button, Stack, TextField } from '@mui/material'
 import { useState } from 'react'
 
 const LoginForm = ({ handleLogin }) => {
+  //throw new Error('simulated error')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
