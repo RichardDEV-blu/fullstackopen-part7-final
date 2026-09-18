@@ -18,3 +18,31 @@ export const useCreateBlog = () => {
     },
   })
 }
+
+export const useLikeBlog = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ blog, token }) => {
+      const updatedBlog = {
+        ...blog,
+        likes: blog.likes + 1,
+        user: blog.user.id,
+      }
+
+      return blogService.update(blog.id, updatedBlog, token)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['blogs'] })
+    },
+  })
+}
+
+export const useDeleteBlog = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ blog, token }) => blogService.remove(blog.id, token),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['blogs'] })
+    },
+  })
+}

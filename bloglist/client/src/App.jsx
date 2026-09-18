@@ -10,11 +10,19 @@ import BlogView from './components/BlogView'
 import { Button, Container, AppBar, Toolbar } from '@mui/material'
 import ErrorBoundary from './components/ErrorBoundary'
 import { useSetNotification } from './hooks/useNotification'
-import { useBlogs, useCreateBlog } from './hooks/useBlogs'
+import {
+  useBlogs,
+  useCreateBlog,
+  useLikeBlog,
+  useDeleteBlog,
+} from './hooks/useBlogs'
 
 const App = () => {
   const { data: blogs = [] } = useBlogs()
+
   const createBlogMutation = useCreateBlog()
+  const likeBlogMutation = useLikeBlog()
+  const deleteBlogMutation = useDeleteBlog()
 
   const setNotification = useSetNotification()
 
@@ -73,17 +81,14 @@ const App = () => {
   }
 
   const likeBlog = async (blog) => {
-    const updatedBlog = {
-      ...blog,
-      likes: blog.likes + 1,
-      user: blog.user.id,
+    try {
+      await likeBlogMutation.mutateAsync({
+        blog,
+        token: user.token,
+      })
+    } catch {
+      showNotification('failed to like blog', 'error')
     }
-
-    const returnedBlog = await blogService.update(
-      blog.id,
-      updatedBlog,
-      user.token,
-    )
   }
 
   const deleteBlog = async (blog) => {
@@ -91,9 +96,16 @@ const App = () => {
       return
     }
 
-    await blogService.remove(blog.id, user.token)
+    try {
+      await deleteBlogMutation.mutateAsync({
+        blog,
+        token: user.token,
+      })
 
-    navigate('/')
+      navigate('/')
+    } catch {
+      showNotification('failed to delete blog', 'error')
+    }
   }
 
   const blogsView = () => (
