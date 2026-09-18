@@ -10,18 +10,18 @@ import BlogView from './components/BlogView'
 import { Button, Container, AppBar, Toolbar } from '@mui/material'
 import ErrorBoundary from './components/ErrorBoundary'
 import { useSetNotification } from './hooks/useNotification'
+import { useBlogs, useCreateBlog } from './hooks/useBlogs'
+
 const App = () => {
+  const { data: blogs = [] } = useBlogs()
+  const createBlogMutation = useCreateBlog()
+
   const setNotification = useSetNotification()
 
-  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const navigate = useNavigate()
   const match = useMatch('/blogs/:id')
   const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null
-
-  useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
-  }, [])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -60,11 +60,11 @@ const App = () => {
 
   const createBlog = async (blog) => {
     try {
-      const returnedBlog = await blogService.create(blog, user.token)
-
-      setBlogs((currentBlogs) => currentBlogs.concat(returnedBlog))
-
-      showNotification(`a new blog ${returnedBlog.title} added`, 'success')
+      const b = await createBlogMutation.mutateAsync({
+        blog,
+        token: user.token,
+      })
+      showNotification(`a new blog ${b.title} added`, 'success')
 
       navigate('/')
     } catch {
@@ -84,10 +84,6 @@ const App = () => {
       updatedBlog,
       user.token,
     )
-
-    setBlogs((currentBlogs) =>
-      currentBlogs.map((b) => (b.id === returnedBlog.id ? returnedBlog : b)),
-    )
   }
 
   const deleteBlog = async (blog) => {
@@ -96,8 +92,6 @@ const App = () => {
     }
 
     await blogService.remove(blog.id, user.token)
-
-    setBlogs((currentBlogs) => currentBlogs.filter((b) => b.id !== blog.id))
 
     navigate('/')
   }
