@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Routes, Route, Link, useNavigate, useMatch } from 'react-router-dom'
 import Blog from './components/Blog'
-import blogService from './services/blogs'
 import LoginForm from './components/loginForm'
 import loginService from './services/login'
 import BlogForm from './components/BlogForm'
@@ -18,7 +17,7 @@ import {
 } from './hooks/server_state/useBlogs'
 import { useUser, useUserActions } from './hooks/client_state/useUserStore'
 import persistenUser from './services/persistenUser'
-
+import Users from './components/Users'
 const App = () => {
   const user = useUser()
   const { setUser } = useUserActions()
@@ -152,6 +151,10 @@ const App = () => {
                 login
               </Button>
             )}
+
+            <Button component={Link} to="/users" color="inherit">
+              users
+            </Button>
           </Toolbar>
         </AppBar>
 
@@ -184,7 +187,7 @@ const App = () => {
                 )
               }
             />
-
+            <Route path="/users" element={<Users />} />
             <Route
               path="*"
               element={
