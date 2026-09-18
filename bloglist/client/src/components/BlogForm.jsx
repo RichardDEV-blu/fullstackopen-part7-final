@@ -1,22 +1,23 @@
-import { useState } from 'react'
 import { Button, Stack, TextField } from '@mui/material'
+import { useField } from '../hooks/client_state'
+
 const BlogForm = ({ createBlog }) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+  const title = useField('text')
+  const author = useField('text')
+  const url = useField('text')
 
   const addBlog = (event) => {
     event.preventDefault()
 
     createBlog({
-      title,
-      author,
-      url,
+      title: title.input.value,
+      author: author.input.value,
+      url: url.input.value,
     })
 
-    setTitle('')
-    setAuthor('')
-    setUrl('')
+    title.reset()
+    author.reset()
+    url.reset()
   }
 
   return (
@@ -26,29 +27,11 @@ const BlogForm = ({ createBlog }) => {
       spacing={2}
       sx={{ maxWidth: 500, mt: 2 }}
     >
-      <TextField
-        label="title"
-        name="title"
-        fullWidth
-        value={title}
-        onChange={({ target }) => setTitle(target.value)}
-      />
+      <TextField {...title.input} label="title" name="title" fullWidth />
 
-      <TextField
-        label="author"
-        name="author"
-        fullWidth
-        value={author}
-        onChange={({ target }) => setAuthor(target.value)}
-      />
+      <TextField {...author.input} label="author" name="author" fullWidth />
 
-      <TextField
-        label="url"
-        name="url"
-        fullWidth
-        value={url}
-        onChange={({ target }) => setUrl(target.value)}
-      />
+      <TextField {...url.input} label="url" name="url" fullWidth />
 
       <Button type="submit" variant="contained">
         create

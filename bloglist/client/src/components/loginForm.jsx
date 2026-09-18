@@ -1,18 +1,20 @@
 import { Button, Stack, TextField } from '@mui/material'
-import { useState } from 'react'
+import { useField } from '../hooks/client_state'
 
 const LoginForm = ({ handleLogin }) => {
-  //throw new Error('simulated error')
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const username = useField('text')
+  const password = useField('password')
 
   const login = (event) => {
     event.preventDefault()
 
     handleLogin({
-      username,
-      password,
+      username: username.input.value,
+      password: password.input.value,
     })
+
+    username.reset()
+    password.reset()
   }
 
   return (
@@ -23,24 +25,24 @@ const LoginForm = ({ handleLogin }) => {
       sx={{ maxWidth: 400, mt: 2 }}
     >
       <TextField
+        {...username.input}
         autoComplete="username"
         label="Username"
         name="username"
         required
         fullWidth
-        value={username}
-        onChange={({ target }) => setUsername(target.value)}
       />
+
       <TextField
+        {...password.input}
         autoComplete="current-password"
         label="Password"
         name="password"
         type="password"
         required
         fullWidth
-        value={password}
-        onChange={({ target }) => setPassword(target.value)}
       />
+
       <Button type="submit" variant="contained">
         Login
       </Button>

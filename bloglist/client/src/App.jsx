@@ -15,12 +15,13 @@ import {
   useCreateBlog,
   useLikeBlog,
   useDeleteBlog,
-} from './hooks/useBlogs'
+} from './hooks/server_state/useBlogs'
 import { useUser, useUserActions } from './hooks/client_state/useUserStore'
+import persistenUser from './services/persistenUser'
 
 const App = () => {
   const user = useUser()
-  const { setUser, clearUser } = useUserActions()
+  const { setUser } = useUserActions()
   const { data: blogs = [] } = useBlogs()
 
   const createBlogMutation = useCreateBlog()
@@ -34,13 +35,12 @@ const App = () => {
   const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
+    const loggedUser = persistenUser.getUser()
 
-    if (loggedUserJSON) {
-      const logged = JSON.parse(loggedUserJSON)
-      setUser(logged)
+    if (loggedUser) {
+      setUser(loggedUser)
     }
-  }, [])
+  }, [setUser])
 
   const showNotification = (message, type) => {
     setNotification(message, type)
@@ -50,10 +50,7 @@ const App = () => {
     try {
       const loggedUser = await loginService.login(credentials)
 
-      window.localStorage.setItem(
-        'loggedBlogappUser',
-        JSON.stringify(loggedUser),
-      )
+      persistenUser.saveUser(loggedUser)
 
       setUser(loggedUser)
       navigate('/')
@@ -63,7 +60,7 @@ const App = () => {
   }
 
   const handleLogout = () => {
-    window.localStorage.removeItem('loggedBlogappUser')
+    persistenUser.removeUser()
     setUser(null)
     navigate('/')
   }

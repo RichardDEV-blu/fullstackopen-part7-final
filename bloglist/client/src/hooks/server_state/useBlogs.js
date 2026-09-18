@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import blogService from '../services/blogs'
+import blogService from '../../services/blogs'
 
 export const useBlogs = () => {
   return useQuery({
