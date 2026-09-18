@@ -9,11 +9,12 @@ import Notification from './components/Notification'
 import BlogView from './components/BlogView'
 import { Button, Container, AppBar, Toolbar } from '@mui/material'
 import ErrorBoundary from './components/ErrorBoundary'
-
+import { useSetNotification } from './hooks/useNotification'
 const App = () => {
+  const setNotification = useSetNotification()
+
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState(null)
   const navigate = useNavigate()
   const match = useMatch('/blogs/:id')
   const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null
@@ -30,6 +31,10 @@ const App = () => {
       setUser(logged)
     }
   }, [])
+
+  const showNotification = (message, type) => {
+    setNotification(message, type)
+  }
 
   const handleLogin = async (credentials) => {
     try {
@@ -65,14 +70,6 @@ const App = () => {
     } catch {
       showNotification('failed to create blog', 'error')
     }
-  }
-
-  const showNotification = (message, type) => {
-    setNotification({ message, type })
-
-    setTimeout(() => {
-      setNotification(null)
-    }, 5000)
   }
 
   const likeBlog = async (blog) => {
@@ -130,10 +127,7 @@ const App = () => {
   return (
     <Container maxWidth="md">
       <div>
-        <Notification
-          message={notification?.message}
-          type={notification?.type}
-        />
+        <Notification />
 
         <h2>blogs</h2>
         <AppBar position="static">
