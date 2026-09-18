@@ -1,0 +1,586 @@
+==============================
+FULL STACK OPEN — NPM COMMANDS
+==============================
+
+
+=====================================
+1. INDIVIDUAL PROJECTS / REPOSITORIES
+=====================================
+
+
+-------------------------------------
+FRONTEND: bloglist-frontend
+-------------------------------------
+
+Run these commands inside the bloglist-frontend folder.
+
+
+npm install
+
+Installs all dependencies defined in package.json and creates node_modules.
+
+
+npm run dev
+
+Starts Vite in development mode.
+
+Usually available at:
+http://localhost:5173
+
+
+npm run build
+
+Builds the frontend for production.
+
+Creates:
+dist/
+
+
+npm run preview
+
+Serves the contents of dist/ locally so you can test the production build.
+
+
+npm run lint
+
+Runs ESLint to detect code errors and problems according to the configured rules.
+
+
+npm test
+
+Runs Vitest in interactive/watch mode.
+
+
+npm test -- --run
+
+Runs the Vitest tests once instead of staying in watch mode.
+
+
+
+-------------------------------------
+BACKEND: backend
+-------------------------------------
+
+Run these commands inside the backend folder.
+
+
+npm install
+
+Installs all dependencies defined in package.json and creates node_modules.
+
+
+npm run dev
+
+Starts the backend with Nodemon.
+
+Nodemon automatically restarts the server when it detects changes.
+
+
+npm start
+
+Starts the backend using the production script.
+
+In this project, the script is:
+
+cross-env NODE_ENV=production node index.js
+
+Therefore, npm start sets NODE_ENV=production.
+
+
+npm run start:test
+
+Starts the backend using:
+
+NODE_ENV=test node --watch index.js
+
+Used for working with the testing configuration while automatically
+restarting the server when files change.
+
+
+npm test
+
+Runs the backend tests using Node's Test Runner.
+
+The script also uses:
+
+--test-concurrency=1
+
+This makes the tests run sequentially.
+
+
+npm run lint
+
+Runs ESLint on the backend.
+
+
+
+=====================================
+2. FINAL MONOREPO
+=====================================
+
+Repository:
+
+fullstackopen-part7-final/
+
+Relevant structure:
+
+bloglist/
+├── package.json
+├── client/
+│   └── package.json
+└── server/
+    └── package.json
+
+
+Run the following commands inside:
+
+fullstackopen-part7-final/bloglist
+
+
+
+-------------------------------------
+INSTALL DEPENDENCIES
+-------------------------------------
+
+
+npm install
+
+Installs the dependencies defined by the monorepo's package.json.
+
+In our case, this mainly installs concurrently.
+
+
+npm install --prefix client
+
+Installs the frontend dependencies using:
+
+bloglist/client/package.json
+
+
+npm install --prefix server
+
+Installs the backend dependencies using:
+
+bloglist/server/package.json
+
+
+
+-------------------------------------
+DEVELOPMENT — FRONTEND + BACKEND
+-------------------------------------
+
+
+npm run dev
+
+This is the main development command.
+
+The monorepo's package.json runs:
+
+npm run dev --prefix server
+npm run dev --prefix client
+
+simultaneously using concurrently.
+
+Typical result:
+
+Frontend → http://localhost:5173
+Backend  → http://localhost:3001
+
+The frontend uses Vite's proxy to send /api requests to the backend.
+
+
+
+-------------------------------------
+FRONTEND ONLY
+-------------------------------------
+
+
+npm run dev --prefix client
+
+Runs the "dev" script from:
+
+bloglist/client/package.json
+
+It is approximately equivalent to:
+
+cd client
+npm run dev
+
+
+
+-------------------------------------
+BACKEND ONLY
+-------------------------------------
+
+
+npm run dev --prefix server
+
+Runs the "dev" script from:
+
+bloglist/server/package.json
+
+It is approximately equivalent to:
+
+cd server
+npm run dev
+
+
+
+-------------------------------------
+PRODUCTION BUILD
+-------------------------------------
+
+
+npm run build
+
+Runs:
+
+npm run build --prefix client
+
+Therefore, it builds only the frontend.
+
+Creates:
+
+bloglist/client/dist/
+
+This directory contains the optimized frontend files that Express
+will serve in production.
+
+
+
+-------------------------------------
+START PRODUCTION
+-------------------------------------
+
+
+npm start
+
+Runs:
+
+npm start --prefix server
+
+Therefore, it starts the backend in production.
+
+The backend sets:
+
+NODE_ENV=production
+
+and Express also serves the compiled frontend from:
+
+client/dist/
+
+So after:
+
+npm run build
+npm start
+
+the complete application can be accessed at:
+
+http://localhost:3001
+
+
+
+-------------------------------------
+FRONTEND TESTS
+-------------------------------------
+
+
+npm test --prefix client
+
+Runs Vitest using the client package.json.
+
+
+npm test --prefix client -- --run
+
+Runs the frontend tests once.
+
+
+
+-------------------------------------
+BACKEND TESTS
+-------------------------------------
+
+
+npm test --prefix server
+
+Runs the backend tests using the server package.json.
+
+
+
+-------------------------------------
+FRONTEND LINT
+-------------------------------------
+
+
+npm run lint --prefix client
+
+Runs ESLint on the frontend.
+
+
+
+-------------------------------------
+BACKEND LINT
+-------------------------------------
+
+
+npm run lint --prefix server
+
+Runs ESLint on the backend.
+
+
+
+=====================================
+3. WHAT DOES --prefix MEAN?
+=====================================
+
+--prefix tells npm to execute the command as if it were being run
+inside the specified folder.
+
+For example:
+
+npm run dev --prefix client
+
+means:
+
+"Run the dev script from the package.json inside client."
+
+It is approximately equivalent to:
+
+cd client
+npm run dev
+
+
+Likewise:
+
+npm run dev --prefix server
+
+is approximately equivalent to:
+
+cd server
+npm run dev
+
+
+
+=====================================
+4. THE THREE package.json FILES
+=====================================
+
+
+bloglist/package.json
+
+Controls the monorepo and coordinates the frontend and backend.
+
+
+bloglist/client/package.json
+
+Controls the React/Vite frontend.
+
+
+bloglist/server/package.json
+
+Controls the Express/Node backend.
+
+
+
+=====================================
+5. MONOREPO package.json
+=====================================
+
+Our bloglist/package.json contains:
+
+{
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "build": "npm run build --prefix client",
+    "start": "npm start --prefix server"
+  }
+}
+
+
+This means:
+
+
+npm run dev
+Runs frontend + backend.
+
+
+npm run build
+
+Builds the frontend.
+
+
+npm start
+
+Starts the backend in production, which also serves the
+compiled frontend.
+
+
+
+=====================================
+6. QUICK CHEAT SHEET — MONOREPO
+=====================================
+
+
+DEVELOPMENT — EVERYTHING:
+
+npm run dev
+
+
+FRONTEND ONLY:
+
+npm run dev --prefix client
+
+
+BACKEND ONLY:
+
+npm run dev --prefix server
+
+
+INSTALL FRONTEND:
+
+npm install --prefix client
+
+
+INSTALL BACKEND:
+
+npm install --prefix server
+
+
+BUILD:
+
+npm run build
+
+
+START PRODUCTION:
+
+npm start
+
+
+FRONTEND TESTS:
+
+npm test --prefix client
+
+
+FRONTEND TESTS — RUN ONCE:
+
+npm test --prefix client -- --run
+
+
+BACKEND TESTS:
+
+npm test --prefix server
+
+
+FRONTEND LINT:
+
+npm run lint --prefix client
+
+
+BACKEND LINT:
+
+npm run lint --prefix server
+
+
+
+=====================================
+7. QUICK CHEAT SHEET — INDIVIDUAL PROJECTS
+=====================================
+
+
+bloglist-frontend:
+
+npm install
+npm run dev
+npm run build
+npm run preview
+npm run lint
+npm test
+npm test -- --run
+
+
+backend:
+
+npm install
+npm run dev
+npm start
+npm run start:test
+npm run lint
+npm test
+
+
+
+=====================================
+8. NORMAL DEVELOPMENT WORKFLOW
+=====================================
+
+
+Inside the monorepo:
+
+cd bloglist
+
+npm run dev
+
+
+This starts:
+
+Frontend → Vite
+Backend  → Express
+
+
+
+=====================================
+9. NORMAL PRODUCTION WORKFLOW
+=====================================
+
+
+Inside the monorepo:
+
+cd bloglist
+
+npm run build
+
+npm start
+
+
+Then open:
+
+http://localhost:3001
+
+
+The important distinction is:
+
+npm run dev
+
+Development environment.
+Vite + Express run separately.
+
+
+npm run build
+
+Creates the production frontend.
+
+
+npm start
+
+Starts Express in production.
+Express serves both the API and the compiled React frontend.
+
+
+
+=====================================
+10. IMPORTANT CONCEPT
+=====================================
+
+The package.json files are not interchangeable.
+
+client/package.json
+Controls the frontend.
+
+server/package.json
+Controls the backend.
+
+bloglist/package.json
+Coordinates both projects.
+
+The monorepo does not replace the individual package.json files.
+It simply uses --prefix to execute their scripts from one place.
