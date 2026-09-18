@@ -1,10 +1,33 @@
-import { Button, Link, Paper, Stack, Typography } from '@mui/material'
+import {
+  Paper,
+  Typography,
+  Stack,
+  Link,
+  Button,
+  TextField,
+} from '@mui/material'
+import { useField } from '../hooks/client_state/index'
+import { useAddComment } from '../hooks/server_state/useBlogs'
 
 const BlogView = ({ blog, user, likeBlog, deleteBlog }) => {
+  const comment = useField('text')
+  const addCommentMutation = useAddComment()
   if (!blog) {
     return null
   }
+  const handleCommentSubmit = async (event) => {
+    event.preventDefault()
+    const text = comment.input.value.trim()
+    if (!text) {
+      return
+    }
+    await addCommentMutation.mutateAsync({
+      id: blog.id,
+      comment: text,
+    })
 
+    comment.reset()
+  }
   return (
     <Paper variant="outlined" sx={{ mt: 2, p: 2 }}>
       <Typography component="h2" variant="h5" sx={{ mb: 2 }}>
@@ -21,7 +44,7 @@ const BlogView = ({ blog, user, likeBlog, deleteBlog }) => {
           {blog.url}
         </Link>
 
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack direction="row" spacing={1} alignitems="center">
           <Typography>{blog.likes} likes</Typography>
 
           {user && (
@@ -55,6 +78,20 @@ const BlogView = ({ blog, user, likeBlog, deleteBlog }) => {
             Comments
           </Typography>
 
+          <Stack
+            component="form"
+            direction="row"
+            spacing={1}
+            onSubmit={handleCommentSubmit}
+            sx={{ mt: 1 }}
+          >
+            <TextField {...comment.input} label="comment" size="small" />
+
+            <Button type="submit" variant="contained">
+              add comment
+            </Button>
+          </Stack>
+
           <ul>
             {blog.comments.map((comment, index) => (
               <li key={index}>{comment}</li>
@@ -65,5 +102,4 @@ const BlogView = ({ blog, user, likeBlog, deleteBlog }) => {
     </Paper>
   )
 }
-
 export default BlogView

@@ -46,3 +46,14 @@ export const useDeleteBlog = () => {
     },
   })
 }
+
+export const useAddComment = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ id, comment }) => blogService.addComment(id, comment),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['blogs'] })
+    },
+  })
+}
